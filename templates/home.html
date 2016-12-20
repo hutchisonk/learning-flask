@@ -6,13 +6,13 @@
 
       <div class="section-tabs">
         <div class="places">
-          {% for place in places %}
-            <article>
-              <a class="name" href="{{ place['url'] }}" target="_blank">{{ place['name'] }}</a>
-              <p class="walking-distance">{{ place['time'] }} min away</p>
-            </article>
-          {% endfor %}
-        </div>
+         {% for place in places %}
+           <article>
+             <a class="name" href="{{ place['url'] }}" target="_blank">{{ place['name'] }}</a>
+             <p class="walking-distance">{{ place['time'] }} min away</p>
+           </article>
+         {% endfor %}
+       </div>
       </div>
 
       <div class="section-map">
@@ -42,6 +42,29 @@
   </main>
 
   <script>
+  //var newvar;
+
+  //
+  // var tries = {{tries}};
+  //
+  // if (tries) {
+  //   document.getElementById("fileinput").style.color = "#ff4d4d";
+  // } else {
+  //   document.getElementById("fileinput").style.color = "#222";
+  // }
+  //
+
+  var fl = {{ first_load }}
+  console.log(fl)
+
+  //this is NOT the first load - THIS IS FOR ERRORS OR GOOD LOADS
+  if (fl == 0) {
+    console.log("not first load");
+
+    var newvar = "{{ places[0] }}";
+    console.log(newvar);
+
+  if (newvar !== "") {//that means there is good data!
     var planes = [
       {% for place in places %}
         ["<h3><a href='{{ place['url'] }}' target='_blank'>{{ place['name'] }}</a></h3> <p>{{ place['time'] }} min away</p>", {{ place['lat'] }}, {{ place['lng'] }} ],
@@ -60,6 +83,48 @@
         .bindPopup(planes[i][0])
         .addTo(map);
     }
-  </script>
+
+  } else {//else it is not the first load, AND there is not good data. 404 TIME
+
+    var planes = [
+    ["<h3><a href='https://en.wikipedia.org/wiki/HTTP_404' target='_blank'>Not Found. Please try another search term</a></h3> <p>0 min away</p>", 25, -71 ],
+  ];
+
+      var map = L.map('map').setView([25, -71], 3);//set view to bermuda triangle
+               mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+               L.tileLayer(
+                 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                   attribution: '&copy; ' + mapLink + ' Contributors',
+                   maxZoom: 18,
+                 }
+               ).addTo(map);
+               for (var i = 0; i < planes.length; i++) {
+                 marker = new L.marker([planes[i][1],planes[i][2]])
+                   .bindPopup(planes[i][0])
+                   .addTo(map);
+               }//end of map blocks
+}
+      } else {//OR ELSE FL IS 1 SO THIS IS THE FIRST LOAD
+        var planes = [
+          {% for place in places %}
+            ["<h3><a href='{{ place['url'] }}' target='_blank'>{{ place['name'] }}</a></h3> <p>{{ place['time'] }} min away</p>", {{ place['lat'] }}, {{ place['lng'] }} ],
+          {% endfor %}
+        ];
+        var map = L.map('map').setView([{{ my_coordinates[0] }}, {{ my_coordinates[1] }}], 15);
+        mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+          'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+          }
+        ).addTo(map);
+        for (var i = 0; i < planes.length; i++) {
+          marker = new L.marker([planes[i][1],planes[i][2]])
+            .bindPopup(planes[i][0])
+            .addTo(map);
+        }//end of map blocks
+    }//else if newvar[0] not 1
+
+    </script>
 
 {% endblock %}

@@ -85,6 +85,11 @@ a {
   text-transform: uppercase;
 }
 
+.btn-log {
+  float:right;
+  font-size: 8px;
+  padding: 4px 16px;
+}
 
 
 /*

@@ -10,17 +10,18 @@
   <body>
     <header>
       <div class="container">
-        <h1 class="title"><a href="{{ url_for("index") }}">Learning Flask</a></h1>
-        {% if session['email'] %}
-        <a href="{{ url_for("logout") }}" class="btn-log btn-secondary">Log Out</a>
-        {% else  %}
-        <a href="{{ url_for("login") }}" class="btn-log btn-secondary">Log In</a>
-        {% endif %}
+        <h1 class="title">Learning Flask</h1>
       </div>
     </header>
 
-    {% block content %}
-    {% endblock %}
+    <main class="about-section">
+      <div class="container">
+
+      <h2>Page Not Found</h2>
+      <p>Uh oh! Looks like we 404'd. Let's <a href="{{ url_for("index") }}">try that again!</a></p>
+
+      </div>
+    </main>
 
   </body>
 </html>

@@ -8,6 +8,7 @@ import json
 
 db = SQLAlchemy()
 
+# the base class for all your sqlalchemy models is called db.Model
 class User(db.Model):
   __tablename__ = 'users'
   uid = db.Column(db.Integer, primary_key = True)
@@ -57,23 +58,27 @@ class Place(object):
     #data = json.loads(results)
 
     places = []
-    for place in data['query']['geosearch']:
-      name = place['title']
-      meters = place['dist']
-      lat = place['lat']
-      lng = place['lon']
+    if "query" in data:
+      for place in data['query']['geosearch']:
+        name = place['title']
+        meters = place['dist']
+        lat = place['lat']
+        lng = place['lon']
 
-      wiki_url = self.wiki_path(name)
-      walking_time = self.meters_to_walking_time(meters)
+        wiki_url = self.wiki_path(name)
+        walking_time = self.meters_to_walking_time(meters)
 
-      d = {
-        'name': name,
-        'url': wiki_url,
-        'time': walking_time,
-        'lat': lat,
-        'lng': lng
-      }
+        d = {
+          'name': name,
+          'url': wiki_url,
+          'time': walking_time,
+          'lat': lat,
+          'lng': lng
+        }
 
-      places.append(d)
+        places.append(d)
 
-    return places
+      return places
+    else:
+      #places.append(1)
+      return places
