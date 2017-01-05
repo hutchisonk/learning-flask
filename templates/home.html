@@ -18,6 +18,8 @@
       <div class="section-map">
         <div class="nav">
           <form method="POST" action="/home">
+            <!-- this is something about CSRF tokens -->
+            <!-- and form here is the address form -->
             {{ form.hidden_tag() }}
 
             <div class="form-group">
@@ -66,10 +68,12 @@
 
   if (newvar !== "") {//that means there is good data!
     var planes = [
+      // for each place in this list we imported, add an h3 link with the details of the place
       {% for place in places %}
         ["<h3><a href='{{ place['url'] }}' target='_blank'>{{ place['name'] }}</a></h3> <p>{{ place['time'] }} min away</p>", {{ place['lat'] }}, {{ place['lng'] }} ],
       {% endfor %}
     ];
+    //the map is loaded from Leaflet set to coordinates that we imported, with a zoom of 15 (fairly far in)
     var map = L.map('map').setView([{{ my_coordinates[0] }}, {{ my_coordinates[1] }}], 15);
     mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
     L.tileLayer(
@@ -78,6 +82,7 @@
         maxZoom: 18,
       }
     ).addTo(map);
+    //for each item in planes, add a marker to the map
     for (var i = 0; i < planes.length; i++) {
       marker = new L.marker([planes[i][1],planes[i][2]])
         .bindPopup(planes[i][0])
@@ -90,7 +95,7 @@
     ["<h3><a href='https://en.wikipedia.org/wiki/HTTP_404' target='_blank'>Not Found. Please try another search term</a></h3> <p>0 min away</p>", 25, -71 ],
   ];
 
-      var map = L.map('map').setView([25, -71], 3);//set view to bermuda triangle
+      var map = L.map('map').setView([25, -71], 3);//set view to bermuda triangle, zoomed out
                mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
                L.tileLayer(
                  'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -105,6 +110,7 @@
                }//end of map blocks
 }
       } else {//OR ELSE FL IS 1 SO THIS IS THE FIRST LOAD
+        //pretty sure this was an experiment that didn't end up working so i could probably get rid of it
         var planes = [
           {% for place in places %}
             ["<h3><a href='{{ place['url'] }}' target='_blank'>{{ place['name'] }}</a></h3> <p>{{ place['time'] }} min away</p>", {{ place['lat'] }}, {{ place['lng'] }} ],

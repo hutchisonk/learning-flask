@@ -6,7 +6,7 @@
     <div class="section-content">
       <h2>Discover places near you.</h2>
 
-
+      <!-- if we're logged in or not -->
       {% if session['email'] %}
       <a href="{{ url_for("home") }}" class="btn-primary">Home</a>
       {% else  %}

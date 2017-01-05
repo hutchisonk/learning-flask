@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+#import our database 
 from models import db, User, Place
+#import our form classes
 from forms import SignupForm, LoginForm, AddressForm
 
 # this file routes URLs to the right place, connects to the database, and is kind of the heart of the application
